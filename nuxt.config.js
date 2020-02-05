@@ -55,6 +55,7 @@ export default {
        */
       secure: false
     },
+    errorHandler: '~/plugins/apollo-error-handler.js',
     clientConfigs: {
       default: {
         httpEndpoint: 'http://localhost:4000/graphql',
