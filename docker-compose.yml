@@ -2,9 +2,11 @@ version: '3.1'
 
 services:
   web:
-    image: registry.cn-shenzhen.aliyuncs.com/lidongming/my/nest-service:2a72798
+    image: registry.cn-shenzhen.aliyuncs.com/lidongming/my/posts:0273496
     ports:
-      - 4000:4000
+      - 8000:8000
     environment:
       - NODE_ENV=production
+      - HTTP_ENDPOINT=http://39.108.107.106:4000/graphql
+      - BROWSER_HTTP_ENDPOINT=http://39.108.107.106:4000/graphql
       

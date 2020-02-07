@@ -1,4 +1,5 @@
+/* eslint-disable */ 
 export default (error, nuxtContext) => {
-  console.log(nuxtContext, 111)
+  // eslint-disable-next-line no-console
   console.error(error, 111)
 }

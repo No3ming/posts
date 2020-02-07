@@ -58,8 +58,10 @@ export default {
     errorHandler: '~/plugins/apollo-error-handler.js',
     clientConfigs: {
       default: {
-        httpEndpoint: 'http://localhost:4000/graphql',
-        browserHttpEndpoint: 'http://localhost:4000/graphql'
+        httpEndpoint:
+          process.env.HTTP_ENDPOINT || 'http://localhost:4000/graphql',
+        browserHttpEndpoint:
+          process.env.BROWSER_HTTP_ENDPOINT || 'http://localhost:4000/graphql'
       }
     }
   },
@@ -97,5 +99,9 @@ export default {
      ** You can extend webpack config here
      */
     extend(config, ctx) {}
+  },
+  server: {
+    port: 8000, // default: 3000
+    host: '0.0.0.0' // default: localhost,
   }
 }

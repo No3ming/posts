@@ -4,7 +4,7 @@
       <div class="text-center">
         欢迎来到出道练习生
       </div>
-      <v-card> </v-card>
+      <v-card></v-card>
     </v-flex>
   </v-layout>
 </template>
