@@ -1,0 +1,10 @@
+version: '3.1'
+
+services:
+  web:
+    image: registry.cn-shenzhen.aliyuncs.com/lidongming/my/nest-service:2a72798
+    ports:
+      - 4000:4000
+    environment:
+      - NODE_ENV=production
+      

@@ -1,11 +1,15 @@
 <template>
-  <v-app dark>
-    <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" fixed app>
-      <v-list>
+  <v-app id="inspire">
+    <v-navigation-drawer v-model="drawer" fixed app>
+      <v-list dense no-action>
+        <v-list-item :nuxt="true" to="/" no-action>
+          首页
+        </v-list-item>
         <v-list-group
           v-for="item in lists"
           :key="item.id"
           v-model="item.active"
+          @click="navClick(item)"
           no-action
         >
           <template v-slot:activator>
@@ -17,8 +21,8 @@
           <v-list-item
             v-for="subItem in item.items"
             :key="subItem.title"
-            @click="itemClick(subItem)"
-            :to="subItem.to"
+            :nuxt="true"
+            :to="`/post/${subItem.id}`"
             no-action
           >
             <v-list-item-content>
@@ -28,11 +32,11 @@
         </v-list-group>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar :clipped-left="clipped" fixed app>
+    <v-app-bar fixed app dark color="indigo">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <!-- <v-toolbar-title v-text="title" /> -->
     </v-app-bar>
-    <v-content>
+    <v-content style="padding: 56px 0px 0px;">
       <v-container>
         <nuxt />
       </v-container>
@@ -53,23 +57,71 @@ export default {
       title: '我的资料'
     }
   },
-  async created() {
-    const query = gql`
-      query {
-        findTags(input: { name: "", limit: 100, offset: 0 }) {
-          id
-          name
-        }
+  created() {
+    this.getTags()
+  },
+  methods: {
+    navClick(item) {
+      if (!item.active && !item.items.length) {
+        this.getPost(item)
       }
-    `
-    try {
-      const lists = await this.$apollo
-        .query({ query, variables: {} })
-        .then(({ data }) => {
-          return data.findTags
-        })
-      this.lists = lists
-    } catch (err) {}
+    },
+    async getPost(item) {
+      const query = gql`
+        query {
+          findPosts(input: { title: "", tag: "${item.id}", limit: 10000, offset: 0 }) {
+            list {
+              id
+              title
+            }
+            total
+          }
+        }
+      `
+      try {
+        const lists = await this.$apollo
+          .query({ query, variables: {} })
+          .then(({ data }) => {
+            return data.findPosts
+          })
+        item.items = lists.list
+      } catch (err) {}
+    },
+    async getTags() {
+      const query = gql`
+        query {
+          findTags(input: { name: "", limit: 100, offset: 0 }) {
+            list {
+              id
+              name
+            }
+            total
+          }
+        }
+      `
+      try {
+        const lists = await this.$apollo
+          .query({ query, variables: {} })
+          .then(({ data }) => {
+            data.findTags.list = data.findTags.list.map((v) => ({
+              items: [],
+              ...v
+            }))
+            return data.findTags
+          })
+        this.lists = lists.list
+      } catch (err) {}
+    }
   }
 }
 </script>
+<style>
+.v-content__wrap {
+  background: #f5f5f5;
+}
+.container {
+  padding: 20px;
+  min-height: 100vh;
+  background: #fff;
+}
+</style>
