@@ -1,23 +1,18 @@
 <template>
   <div>
-    <div v-if="err" v-html="err" />
-    <div v-else>
-      <h2 class="title">{{ post.title }}</h2>
-      <v-chip small color="indigo" text-color="white">
-        <v-avatar left>
-          <v-icon>mdi-account-circle</v-icon>
-        </v-avatar>
-        {{ post.creator.username }}
-      </v-chip>
-      <v-chip small color="pink" label text-color="white">
-        <v-icon left>mdi-label</v-icon>
-        {{ post.tag.name }}
-      </v-chip>
-      <p class="des">
-        {{ post.createdAt }} 字数 {{ len }} 阅读 {{ post.view }}
-      </p>
-      <div v-html="post.post" class="markdown-body" />
-    </div>
+    <h2 class="title">{{ post.title }}</h2>
+    <v-chip :key="1" small color="indigo" text-color="white">
+      <v-avatar left>
+        <v-icon>mdi-account-circle</v-icon>
+      </v-avatar>
+      <span>{{ post.creator.username }}</span>
+    </v-chip>
+    <v-chip small color="pink" label text-color="white">
+      <v-icon left>mdi-label</v-icon>
+      <span>{{ post.tag.name }}</span>
+    </v-chip>
+    <p class="des">{{ post.createdAt }} 字数 {{ len }} 阅读 {{ post.view }}</p>
+    <div v-html="post.post" class="markdown-body" />
   </div>
 </template>
 
@@ -26,6 +21,8 @@
 import markdow from '@/utils/markdown'
 import gql from 'graphql-tag'
 import dayjs from 'dayjs'
+import '~/assets/github.min.css'
+import '~/assets/github-markdown.min.css'
 export default {
   data() {
     return {
@@ -44,8 +41,7 @@ export default {
         },
         createdAt: 0
       },
-      len: 0,
-      err: ''
+      len: 0
     }
   },
   async asyncData(context) {
@@ -54,7 +50,7 @@ export default {
     const query = gql`
       query {
         findOnePost(id: "${id}") {
-          id
+          id,
           title
           post,
           view,
@@ -81,16 +77,14 @@ export default {
       post.createdAt = dayjs(post.createdAt).format('YYYY.MM.DD hh:mm:ss')
       return { post, len }
     } catch (err) {
-      return { err: err.message }
+      context.error(err)
     }
   },
   methods: {}
 }
 </script>
 
-<style scoped>
-@import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css');
-@import url('https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.9.0/github-markdown.min.css');
+<style lang="scss">
 pre {
   width: 100%;
   display: block;
