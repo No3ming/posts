@@ -45,7 +45,8 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/apollo'
+    '@nuxtjs/apollo',
+    '@nuxtjs/proxy'
   ],
   apollo: {
     cookieAttributes: {
@@ -58,10 +59,8 @@ export default {
     errorHandler: '~/plugins/apollo-error-handler.js',
     clientConfigs: {
       default: {
-        httpEndpoint:
-          process.env.HTTP_ENDPOINT || 'http://localhost:4000/graphql',
-        browserHttpEndpoint:
-          process.env.BROWSER_HTTP_ENDPOINT || 'http://localhost:4000/graphql'
+        httpEndpoint: process.env.HTTP_ENDPOINT || '/graphql',
+        browserHttpEndpoint: process.env.BROWSER_HTTP_ENDPOINT || '/graphql'
       }
     }
   },
@@ -104,5 +103,6 @@ export default {
     port: 8000, // default: 3000
     host: '0.0.0.0' // default: localhost,
   },
+  proxy: [['/graphql', { target: 'http://39.108.107.106:4000' }]],
   env: {}
 }
