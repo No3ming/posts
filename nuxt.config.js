@@ -59,7 +59,8 @@ export default {
     errorHandler: '~/plugins/apollo-error-handler.js',
     clientConfigs: {
       default: {
-        httpEndpoint: process.env.HTTP_ENDPOINT || '/graphql',
+        httpEndpoint:
+          process.env.HTTP_ENDPOINT || 'http://39.108.107.106:4000/graphql',
         browserHttpEndpoint: process.env.BROWSER_HTTP_ENDPOINT || '/graphql'
       }
     }
