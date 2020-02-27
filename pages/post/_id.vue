@@ -44,6 +44,11 @@ export default {
       len: 0
     }
   },
+  head() {
+    return {
+      title: this.post.title
+    }
+  },
   async asyncData(context) {
     const client = context.app.apolloProvider.defaultClient
     const { id } = context.params
